@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>North Brew — кав'ярня в серці міста</title>
+<meta name="description" content="North Brew — кав'ярня з фірмовою обсмажкою, затишною атмосферою та меню кави, чаю і десертів.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450;1,9..144,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream:#F4EEE1;
+    --cream-2:#ECE3D0;
+    --white:#FFFDF8;
+    --espresso:#2A1A10;
+    --espresso-2:#1C1109;
+    --brown:#5B4028;
+    --brown-soft:#8A6B4B;
+    --gold:#AD8348;
+    --gold-light:#D9C29B;
+    --line: rgba(42,26,16,0.14);
+    --shadow: 0 20px 50px rgba(28,17,9,0.18);
+    --ease: cubic-bezier(.22,1,.36,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope', sans-serif;
+    background:var(--cream);
+    color:var(--espresso);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  @media(max-width:640px){.wrap{padding:0 20px;}}
+
+  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:450; line-height:1.05; letter-spacing:-0.01em;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px; height:1px;
+    background:var(--gold);
+    display:inline-block;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Manrope', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    letter-spacing:0.01em;
+    padding:15px 28px;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .35s var(--ease), background .3s ease, color .3s ease, border-color .3s ease;
+  }
+  .btn-primary{background:var(--espresso); color:var(--cream);}
+  .btn-primary:hover{background:var(--gold); color:var(--espresso-2); transform:translateY(-2px);}
+  .btn-ghost{background:transparent; color:var(--white); border-color:rgba(255,253,248,0.5);}
+  .btn-ghost:hover{background:rgba(255,253,248,0.12); border-color:var(--white); transform:translateY(-2px);}
+  .btn-outline{background:transparent; color:var(--espresso); border-color:var(--espresso);}
+  .btn-outline:hover{background:var(--espresso); color:var(--cream); transform:translateY(-2px);}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:900;
+    padding:22px 0;
+    transition:padding .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  header .wrap{display:flex; align-items:center; justify-content:space-between;}
+  header.scrolled{
+    padding:14px 0;
+    background:rgba(244,238,225,0.92);
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 30px rgba(28,17,9,0.08);
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:0.01em;
+    color:var(--white);
+    transition:color .4s ease;
+  }
+  .logo em{font-style:italic; font-weight:450; color:var(--gold-light);}
+  header.scrolled .logo{color:var(--espresso);}
+  header.scrolled .logo em{color:var(--gold);}
+
+  nav.primary-nav ul{display:flex; gap:34px;}
+  nav.primary-nav a{
+    font-size:14px; font-weight:600; color:rgba(255,253,248,0.85);
+    position:relative; padding-bottom:4px; transition:color .3s ease;
+  }
+  header.scrolled nav.primary-nav a{color:var(--brown);}
+  nav.primary-nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:currentColor; transition:width .3s var(--ease);
+  }
+  nav.primary-nav a:hover::after{width:100%;}
+  nav.primary-nav a:hover{color:var(--gold);}
+
+  .nav-actions{display:flex; align-items:center; gap:18px;}
+  .nav-cta{display:inline-block;}
+  @media(max-width:900px){
+    nav.primary-nav{display:none;}
+  }
+
+  .burger{
+    display:none; width:32px; height:22px; position:relative; cursor:pointer; z-index:1000;
+  }
+  .burger span{
+    position:absolute; left:0; right:0; height:1.5px; background:var(--white);
+    transition:transform .35s var(--ease), opacity .3s ease, background .3s ease;
+  }
+  header.scrolled .burger span{background:var(--espresso);}
+  .burger span:nth-child(1){top:2px;}
+  .burger span:nth-child(2){top:11px;}
+  .burger span:nth-child(3){top:20px;}
+  body.menu-open .burger span:nth-child(1){transform:translateY(9px) rotate(45deg);}
+  body.menu-open .burger span:nth-child(2){opacity:0;}
+  body.menu-open .burger span:nth-child(3){transform:translateY(-9px) rotate(-45deg);}
+  body.menu-open .burger span{background:var(--cream) !important;}
+
+  @media(max-width:900px){
+    .burger{display:block;}
+    .nav-cta.desktop-only{display:none;}
+  }
+
+  .mobile-menu{
+    position:fixed; inset:0; background:var(--espresso-2);
+    z-index:950; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
+    transform:translateY(-100%); transition:transform .5s var(--ease);
+  }
+  body.menu-open .mobile-menu{transform:translateY(0);}
+  .mobile-menu a{font-family:'Fraunces', serif; font-size:30px; color:var(--cream);}
+  .mobile-menu .btn{margin-top:10px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; min-height:100svh; display:flex; align-items:flex-end;
+    overflow:hidden; color:var(--white);
+  }
+  .hero-media{position:absolute; inset:0; z-index:0;}
+  .hero-media img{width:100%; height:100%; object-fit:cover;}
+  .hero-media::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(21,13,7,0.35) 0%, rgba(21,13,7,0.35) 40%, rgba(18,11,6,0.92) 100%);
+  }
+  .hero-content{position:relative; z-index:2; padding-bottom:100px; width:100%;}
+  .hero-grid{display:grid; grid-template-columns:1.4fr 0.8fr; gap:60px; align-items:end;}
+  .hero-eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12.5px; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--gold-light); margin-bottom:22px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .hero-eyebrow .steam-icon{width:16px; height:20px; position:relative;}
+  .hero h1{
+    font-size:clamp(48px, 8vw, 96px);
+    font-weight:450;
+    letter-spacing:-0.02em;
+    color:var(--cream);
+  }
+  .hero h1 em{font-style:italic; color:var(--gold-light); font-weight:450;}
+  .hero-sub{
+    max-width:420px; font-size:16px; line-height:1.7; color:rgba(244,238,225,0.78);
+    padding-bottom:8px;
+  }
+  .hero-actions{display:flex; gap:16px; margin-top:30px; flex-wrap:wrap;}
+  .hero-scroll{
+    position:absolute; right:32px; bottom:36px; z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.15em;
+    color:rgba(244,238,225,0.7); text-transform:uppercase;
+  }
+  .hero-scroll .line{width:1px; height:52px; background:rgba(244,238,225,0.4); position:relative; overflow:hidden;}
+  .hero-scroll .line::after{
+    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--gold-light);
+    animation:scrollLine 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollLine{
+    0%{top:-100%;} 50%{top:0;} 100%{top:100%;}
+  }
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr; gap:26px;}
+    .hero-scroll{display:none;}
+    .hero-content{padding-bottom:70px;}
+  }
+
+  /* steam animation used in eyebrow + about signature */
+  .steam-icon span{
+    position:absolute; bottom:0; width:2px; height:10px; background:currentColor; border-radius:2px;
+    opacity:0.8; animation:steamRise 2.6s ease-in infinite;
+  }
+  .steam-icon span:nth-child(1){left:2px; animation-delay:0s;}
+  .steam-icon span:nth-child(2){left:7px; animation-delay:.7s;}
+  .steam-icon span:nth-child(3){left:12px; animation-delay:1.4s;}
+  @keyframes steamRise{
+    0%{transform:translateY(0) scaleY(1); opacity:0;}
+    15%{opacity:.9;}
+    100%{transform:translateY(-18px) scaleY(1.6); opacity:0;}
+  }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(36px); transition:opacity .9s var(--ease), transform .9s var(--ease);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal-delay-1{transition-delay:.1s;}
+  .reveal-delay-2{transition-delay:.2s;}
+  .reveal-delay-3{transition-delay:.3s;}
+
+  section{padding:120px 0;}
+  @media(max-width:768px){section{padding:80px 0;}}
+
+  .section-head{max-width:640px; margin-bottom:60px;}
+  .section-head h2{font-size:clamp(34px,4.5vw,52px);}
+  .section-head p{margin-top:18px; font-size:16.5px; line-height:1.7; color:var(--brown);}
+
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--white);}
+  .about-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:70px; align-items:center;}
+  .about-media{position:relative;}
+  .about-media img{width:100%; border-radius:2px; box-shadow:var(--shadow);}
+  .about-media .frame{
+    position:absolute; top:24px; left:24px; right:-24px; bottom:-24px;
+    border:1px solid var(--gold); z-index:-1;
+  }
+  .about-stats{display:flex; gap:40px; margin-top:40px; flex-wrap:wrap;}
+  .about-stat{}
+  .about-stat b{font-family:'Fraunces', serif; font-size:38px; font-weight:450; color:var(--espresso); display:block;}
+  .about-stat span{font-size:13px; color:var(--brown-soft); text-transform:uppercase; letter-spacing:0.08em;}
+  .about-copy p{font-size:16px; line-height:1.8; color:var(--brown); margin-bottom:18px;}
+  .about-copy p:first-of-type{font-family:'Fraunces', serif; font-size:22px; font-style:italic; color:var(--espresso); line-height:1.5; margin-bottom:24px;}
+  @media(max-width:900px){
+    .about-grid{grid-template-columns:1fr; gap:40px;}
+    .about-media .frame{display:none;}
+  }
+
+  /* ---------- MENU ---------- */
+  .menu{background:var(--espresso-2); color:var(--cream); position:relative;}
+  .menu::before{
+    content:''; position:absolute; inset:0; opacity:0.05;
+    background-image:radial-gradient(circle at 1px 1px, var(--cream) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  .menu .wrap{position:relative;}
+  .menu .section-head p{color:rgba(244,238,225,0.65);}
+  .menu .eyebrow{color:var(--gold-light);}
+  .menu .eyebrow::before{background:var(--gold-light);}
+
+  .menu-tabs{display:flex; gap:8px; margin-bottom:50px; flex-wrap:wrap;}
+  .menu-tab{
+    font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:0.05em;
+    padding:11px 22px; border:1px solid rgba(244,238,225,0.25); border-radius:30px;
+    color:rgba(244,238,225,0.7); cursor:pointer; background:transparent;
+    transition:all .35s var(--ease);
+  }
+  .menu-tab.active, .menu-tab:hover{
+    background:var(--gold); color:var(--espresso-2); border-color:var(--gold);
+  }
+
+  .menu-panel{display:none;}
+  .menu-panel.active{display:block; animation:fadeIn .5s var(--ease);}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+  .menu-list{display:grid; grid-template-columns:1fr 1fr; gap:0 60px;}
+  @media(max-width:768px){.menu-list{grid-template-columns:1fr;}}
+
+  .menu-item{
+    display:flex; align-items:baseline; gap:12px;
+    padding:20px 0; border-bottom:1px solid rgba(244,238,225,0.14);
+  }
+  .menu-item-name{font-family:'Fraunces', serif; font-size:19px; font-weight:450; white-space:nowrap;}
+  .menu-item-name .tag{
+    font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.05em;
+    color:var(--gold-light); border:1px solid rgba(217,194,155,0.4); border-radius:20px;
+    padding:2px 8px; margin-left:10px; vertical-align:middle; text-transform:uppercase;
+  }
+  .menu-item-leader{flex:1; border-bottom:1px dotted rgba(244,238,225,0.3); margin-bottom:6px; min-width:20px;}
+  .menu-item-price{font-family:'JetBrains Mono', monospace; font-size:16px; color:var(--gold-light); white-space:nowrap;}
+  .menu-item-desc{
+    flex-basis:100%; font-size:13.5px; color:rgba(244,238,225,0.55); margin-top:-10px; line-height:1.5;
+  }
+
+  /* ---------- GALLERY ---------- */
+  .gallery{background:var(--cream);}
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); grid-auto-rows:130px; gap:14px;
+  }
+  .gallery-item{
+    position:relative; overflow:hidden; border-radius:2px; cursor:pointer;
+  }
+  .gallery-item img{width:100%; height:100%; object-fit:cover; transition:transform .7s var(--ease);}
+  .gallery-item:hover img{transform:scale(1.08);}
+  .gallery-item::after{
+    content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(28,17,9,0.65) 100%);
+    opacity:0; transition:opacity .4s ease;
+  }
+  .gallery-item span{
+    position:absolute; left:16px; bottom:14px; color:var(--white); font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:.05em; opacity:0; transform:translateY(8px);
+    transition:opacity .4s ease, transform .4s ease; z-index:2;
+  }
+  .gallery-item:hover::after, .gallery-item:hover span{opacity:1; transform:translateY(0);}
+  .g1{grid-column:span 2; grid-row:span 2;}
+  .g4{grid-column:span 2;}
+  @media(max-width:900px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:150px;}
+    .g1{grid-column:span 2; grid-row:span 2;}
+    .g4{grid-column:span 1;}
+  }
+
+  /* ---------- REVIEWS ---------- */
+  .reviews{background:var(--white);}
+  .reviews-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  @media(max-width:900px){.reviews-grid{grid-template-columns:1fr; gap:20px;}}
+  .review-card{
+    background:var(--cream); padding:36px 30px; border-radius:2px; position:relative;
+    transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  .review-card:hover{transform:translateY(-6px); box-shadow:var(--shadow);}
+  .stars{color:var(--gold); font-size:15px; letter-spacing:3px; margin-bottom:18px;}
+  .review-text{font-size:15.5px; line-height:1.75; color:var(--brown); margin-bottom:24px;}
+  .review-author{display:flex; align-items:center; gap:12px;}
+  .review-avatar{
+    width:42px; height:42px; border-radius:50%; background:var(--espresso); color:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-size:16px;
+  }
+  .review-name{font-weight:700; font-size:14.5px;}
+  .review-role{font-size:12.5px; color:var(--brown-soft);}
+
+  /* ---------- LOCATION ---------- */
+  .location{background:var(--espresso); color:var(--cream);}
+  .location-grid{display:grid; grid-template-columns:0.85fr 1.15fr; gap:0; border:1px solid rgba(244,238,225,0.15);}
+  @media(max-width:900px){.location-grid{grid-template-columns:1fr;}}
+  .location-info{padding:56px 48px;}
+  @media(max-width:640px){.location-info{padding:40px 28px;}}
+  .location .eyebrow{color:var(--gold-light);}
+  .location .eyebrow::before{background:var(--gold-light);}
+  .location h2{font-size:clamp(30px,4vw,44px); margin-bottom:32px;}
+  .info-block{margin-bottom:28px; padding-bottom:28px; border-bottom:1px solid rgba(244,238,225,0.14);}
+  .info-block:last-of-type{border-bottom:none;}
+  .info-block h4{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold-light); margin-bottom:10px; font-weight:500;
+  }
+  .info-block p{font-size:16px; line-height:1.7; color:rgba(244,238,225,0.85);}
+  .hours-row{display:flex; justify-content:space-between; max-width:280px; font-size:15px; padding:4px 0; color:rgba(244,238,225,0.85);}
+  .hours-row .day{color:rgba(244,238,225,0.55);}
+  .map-frame{min-height:420px; position:relative; filter:sepia(12%) saturate(0.85) contrast(1.02);}
+  .map-frame iframe{width:100%; height:100%; position:absolute; inset:0; border:0;}
+  @media(max-width:900px){.map-frame{min-height:320px;}}
+
+  /* ---------- CTA STRIP ---------- */
+  .cta-strip{
+    background:var(--gold); color:var(--espresso-2); padding:70px 0; text-align:center;
+  }
+  .cta-strip h3{font-size:clamp(26px,4vw,38px); margin-bottom:26px;}
+  .cta-strip .btn-primary{background:var(--espresso-2); color:var(--cream);}
+  .cta-strip .btn-primary:hover{background:var(--white); color:var(--espresso-2);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--espresso-2); color:rgba(244,238,225,0.6); padding:60px 0 30px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:40px; border-bottom:1px solid rgba(244,238,225,0.1);}
+  .footer-logo{font-family:'Fraunces', serif; font-size:24px; color:var(--cream); margin-bottom:14px;}
+  .footer-logo em{color:var(--gold-light); font-style:italic;}
+  .footer-col h5{font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold-light); margin-bottom:16px;}
+  .footer-col ul li{margin-bottom:10px; font-size:14.5px;}
+  .footer-col ul a:hover{color:var(--cream);}
+  .footer-bottom{padding-top:24px; display:flex; justify-content:space-between; font-size:12.5px; flex-wrap:wrap; gap:10px;}
+
+  /* ---------- FLOATING ORDER BUTTON ---------- */
+  .float-cta{
+    position:fixed; right:24px; bottom:24px; z-index:800;
+    box-shadow:0 14px 30px rgba(28,17,9,0.35);
+    transform:translateY(120px); transition:transform .5s var(--ease);
+  }
+  .float-cta.show{transform:translateY(0);}
+  @media(min-width:901px){.float-cta{display:none;}}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,12,7,0.6); backdrop-filter:blur(4px);
+    z-index:1200; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .35s ease; padding:20px;
+  }
+  .modal-overlay.show{opacity:1; pointer-events:auto;}
+  .modal{
+    background:var(--cream); max-width:400px; width:100%; padding:44px 36px; border-radius:2px;
+    position:relative; transform:translateY(20px) scale(0.97); transition:transform .4s var(--ease);
+    text-align:center;
+  }
+  .modal-overlay.show .modal{transform:translateY(0) scale(1);}
+  .modal h3{font-size:26px; margin-bottom:12px;}
+  .modal p{color:var(--brown); font-size:14.5px; margin-bottom:26px; line-height:1.6;}
+  .modal-close{
+    position:absolute; top:16px; right:18px; font-size:22px; cursor:pointer; color:var(--brown-soft);
+    line-height:1; background:none; border:none;
+  }
+  .modal .btn{width:100%; justify-content:center; margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <a href="#top" class="logo">North <em>Brew</em></a>
+    <nav class="primary-nav">
+      <ul>
+        <li><a href="#about">Про нас</a></li>
+        <li><a href="#menu">Меню</a></li>
+        <li><a href="#gallery">Галерея</a></li>
+        <li><a href="#reviews">Відгуки</a></li>
+        <li><a href="#location">Контакти</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-ghost nav-cta desktop-only" id="openOrderBtn1">Замовити</button>
+      <div class="burger" id="burgerBtn"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">Про нас</a>
+  <a href="#menu">Меню</a>
+  <a href="#gallery">Галерея</a>
+  <a href="#reviews">Відгуки</a>
+  <a href="#location">Контакти</a>
+  <button class="btn btn-primary" id="openOrderBtn2">Замовити</button>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-media">
+      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1800&q=80" alt="Кавова чашка з малюнком латте-арт у North Brew">
+    </div>
+    <div class="hero-content wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="steam-icon"><span></span><span></span><span></span></span>
+            Кав'ярня фірмової обсмажки · з 2016 року
+          </div>
+          <h1>Тиша, дерево<br>і запах <em>свіжої</em><br>кави</h1>
+        </div>
+        <div>
+          <p class="hero-sub">North Brew — місце, де ранок починається повільно. Ми обсмажуємо зерно самі, завариваємо вручну і наливаємо каву в чашки, які хочеться тримати довше, ніж треба.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="openOrderBtn3">Замовити каву</button>
+            <a href="#menu" class="btn btn-ghost">Дивитись меню</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Гортайте</span>
+      <span class="line"></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div class="reveal about-media">
+        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=900&q=80" alt="Інтер'єр кав'ярні North Brew з дерев'яними столами">
+        <div class="frame"></div>
+      </div>
+      <div>
+        <div class="eyebrow reveal">Про нас</div>
+        <h2 class="reveal" style="font-size:clamp(30px,4vw,44px); margin-bottom:26px;">Кав'ярня, яку ми самі хотіли знайти в своєму районі</h2>
+        <div class="about-copy reveal reveal-delay-1">
+          <p>North Brew почався з однієї домашньої обсмажувальної машини на 20 хвилин ходьби від центру — і бажання варити каву так, як варили б для друзів.</p>
+          <p>Сьогодні ми самі відбираємо зерно у фермерів Ефіопії, Колумбії та Гватемали, обсмажуємо невеликими партіями щотижня і подаємо каву людям, які прийшли посидіти, попрацювати або просто зігрітись.</p>
+          <p>Дерево, цегла та тепле світло — простір, з якого не хочеться йти.</p>
+        </div>
+        <div class="about-stats reveal reveal-delay-2">
+          <div class="about-stat"><b>2016</b><span>Рік заснування</span></div>
+          <div class="about-stat"><b>7</b><span>Сортів зерна</span></div>
+          <div class="about-stat"><b>40 000+</b><span>Чашок на рік</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Меню</div>
+        <h2>Кава, чай і трохи солодкого</h2>
+        <p>Усе завариваємо на замовлення. Молоко на вибір: коров'яче, вівсяне чи мигдалеве — без доплати.</p>
+      </div>
+
+      <div class="menu-tabs reveal">
+        <button class="menu-tab active" data-tab="coffee">☕ Coffee</button>
+        <button class="menu-tab" data-tab="tea">🍵 Tea</button>
+        <button class="menu-tab" data-tab="desserts">🍰 Desserts</button>
+      </div>
+
+      <div class="menu-panel active" id="panel-coffee">
+        <div class="menu-list">
+          <div class="menu-item"><span class="menu-item-name">Еспресо</span><span class="menu-item-leader"></span><span class="menu-item-price">65 ₴</span><span class="menu-item-desc">Подвійна порція, фірмова обсмажка North Brew</span></div>
+          <div class="menu-item"><span class="menu-item-name">Американо</span><span class="menu-item-leader"></span><span class="menu-item-price">70 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Капучино</span><span class="menu-item-leader"></span><span class="menu-item-price">85 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Флет Уайт</span><span class="menu-item-leader"></span><span class="menu-item-price">95 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Лате</span><span class="menu-item-leader"></span><span class="menu-item-price">90 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Раф North Brew<span class="tag">фірмовий</span></span><span class="menu-item-leader"></span><span class="menu-item-price">110 ₴</span><span class="menu-item-desc">Ванільний сироп власного приготування, вершки</span></div>
+          <div class="menu-item"><span class="menu-item-name">Кава на молоці з корицею</span><span class="menu-item-leader"></span><span class="menu-item-price">95 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Айс-лате</span><span class="menu-item-leader"></span><span class="menu-item-price">95 ₴</span></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="panel-tea">
+        <div class="menu-list">
+          <div class="menu-item"><span class="menu-item-name">Чорний чай</span><span class="menu-item-leader"></span><span class="menu-item-price">60 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Зелений чай</span><span class="menu-item-leader"></span><span class="menu-item-price">60 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Матча Лате</span><span class="menu-item-leader"></span><span class="menu-item-price">95 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Фруктовий чай</span><span class="menu-item-leader"></span><span class="menu-item-price">65 ₴</span><span class="menu-item-desc">Яблуко, гібіскус, шипшина</span></div>
+          <div class="menu-item"><span class="menu-item-name">Імбирний чай з медом</span><span class="menu-item-leader"></span><span class="menu-item-price">70 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Чай Ерл Грей</span><span class="menu-item-leader"></span><span class="menu-item-price">65 ₴</span></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="panel-desserts">
+        <div class="menu-list">
+          <div class="menu-item"><span class="menu-item-name">Чізкейк Нью-Йорк</span><span class="menu-item-leader"></span><span class="menu-item-price">120 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Круасан вершковий</span><span class="menu-item-leader"></span><span class="menu-item-price">55 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Шоколадний брауні</span><span class="menu-item-leader"></span><span class="menu-item-price">90 ₴</span><span class="menu-item-desc">Вологий, з бельгійським шоколадом</span></div>
+          <div class="menu-item"><span class="menu-item-name">Тірамісу</span><span class="menu-item-leader"></span><span class="menu-item-price">130 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Морквяний торт</span><span class="menu-item-leader"></span><span class="menu-item-price">115 ₴</span></div>
+          <div class="menu-item"><span class="menu-item-name">Синабон North Brew<span class="tag">фірмовий</span></span><span class="menu-item-leader"></span><span class="menu-item-price">85 ₴</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Галерея</div>
+        <h2>Атмосфера North Brew</h2>
+      </div>
+      <div class="gallery-grid reveal">
+        <div class="gallery-item g1">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80" alt="Латте-арт крупним планом">
+          <span>Латте-арт</span>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=600&q=80" alt="Зала кав'ярні North Brew">
+          <span>Зала</span>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80" alt="Свіжообсмажені кавові зерна">
+          <span>Обсмажка</span>
+        </div>
+        <div class="gallery-item g4">
+          <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=900&q=80" alt="Чашка кави на дерев'яному столі">
+          <span>Ранкова кава</span>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80" alt="Кава на прилавку North Brew">
+          <span>Барна стійка</span>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1495465798138-718f86d1a4bd?auto=format&fit=crop&w=600&q=80" alt="Латте-арт вигляд згори">
+          <span>Деталі</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews" id="reviews">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Відгуки</div>
+        <h2>Що кажуть наші гості</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card reveal">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">Найкраща кава в районі. Раф North Brew — це вже ритуал по суботах. Персонал завжди пам'ятає моє замовлення.</p>
+          <div class="review-author">
+            <div class="review-avatar">О</div>
+            <div><div class="review-name">Олена К.</div><div class="review-role">Постійна гостя</div></div>
+          </div>
+        </div>
+        <div class="review-card reveal reveal-delay-1">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">Працюю тут двічі на тиждень — тихо, зручні розетки, і капучино не гірше, ніж у Мілані. Рекомендую всім фрилансерам.</p>
+          <div class="review-author">
+            <div class="review-avatar">М</div>
+            <div><div class="review-name">Максим Т.</div><div class="review-role">Дизайнер</div></div>
+          </div>
+        </div>
+        <div class="review-card reveal reveal-delay-2">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">Брауні тут просто вологий та шоколадний, а не суха підошва як усюди. Атмосфера дуже тепла, приходимо всією родиною.</p>
+          <div class="review-author">
+            <div class="review-avatar">Н</div>
+            <div><div class="review-name">Наталія Р.</div><div class="review-role">Гостя з дітьми</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="location" id="location">
+    <div class="wrap">
+      <div class="location-grid reveal">
+        <div class="location-info">
+          <div class="eyebrow">Контакти</div>
+          <h2>Знайти нас</h2>
+          <div class="info-block">
+            <h4>Адреса</h4>
+            <p>вул. Хрещатик, 22<br>Київ, 01001</p>
+          </div>
+          <div class="info-block">
+            <h4>Графік роботи</h4>
+            <div class="hours-row"><span class="day">Пн – Пт</span><span>8:00 — 20:00</span></div>
+            <div class="hours-row"><span class="day">Сб – Нд</span><span>9:00 — 21:00</span></div>
+          </div>
+          <div class="info-block">
+            <h4>Зв'язок</h4>
+            <p><a href="tel:+380441234567">+380 44 123 45 67</a><br><a href="mailto:hello@northbrew.ua">hello@northbrew.ua</a></p>
+          </div>
+        </div>
+        <div class="map-frame">
+          <iframe src="https://www.google.com/maps?q=Khreshchatyk%20Street%2022%2C%20Kyiv&output=embed" loading="lazy" title="Карта North Brew" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section class="cta-strip">
+    <div class="wrap reveal">
+      <h3>Чекаємо на вас з чашкою свіжозвареної кави</h3>
+      <button class="btn btn-primary" id="openOrderBtn4">Замовити зараз</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">North <em>Brew</em></div>
+        <p style="max-width:240px; font-size:14px; line-height:1.6;">Кав'ярня фірмової обсмажки в самому центрі Києва.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Розділи</h5>
+        <ul>
+          <li><a href="#about">Про нас</a></li>
+          <li><a href="#menu">Меню</a></li>
+          <li><a href="#gallery">Галерея</a></li>
+          <li><a href="#reviews">Відгуки</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Контакти</h5>
+        <ul>
+          <li><a href="tel:+380441234567">+380 44 123 45 67</a></li>
+          <li><a href="mailto:hello@northbrew.ua">hello@northbrew.ua</a></li>
+          <li>вул. Хрещатик, 22, Київ</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Соцмережі</h5>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 North Brew. Усі права захищено.</span>
+      <span>Зроблено з ♥ та кавою</span>
+    </div>
+  </div>
+</footer>
+
+<button class="btn btn-primary float-cta" id="floatCta">Замовити</button>
+
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h3>Замовити в North Brew</h3>
+    <p>Оберіть зручний спосіб — і ми підготуємо вашу каву до приходу.</p>
+    <a class="btn btn-primary" href="tel:+380441234567">Зателефонувати нам</a>
+    <a class="btn btn-outline" href="mailto:hello@northbrew.ua">Написати на пошту</a>
+  </div>
+</div>
+
+<script>
+  // Header scroll state
+  const header = document.getElementById('siteHeader');
+  const floatCta = document.getElementById('floatCta');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 60);
+    floatCta.classList.toggle('show', y > 500);
+  });
+
+  // Mobile menu
+  const burger = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    document.body.classList.toggle('menu-open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    document.body.classList.remove('menu-open');
+  }));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Order modal
+  const modal = document.getElementById('orderModal');
+  ['openOrderBtn1','openOrderBtn2','openOrderBtn3','openOrderBtn4','floatCta'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('click', () => {
+      modal.classList.add('show');
+      document.body.classList.remove('menu-open');
+    });
+  });
+  document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('show'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('show'); });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
